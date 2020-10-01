@@ -1,0 +1,24 @@
+.authorization {
+  background-color: #b39d9d8f;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.authorization__link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  background-color: green;
+  text-decoration: none;
+  text-align: center;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  color: antiquewhite;
+  border: 6px solid #22c722b8;
+  line-height: 32px;
+  box-shadow: 0 0 20px black;
+}
