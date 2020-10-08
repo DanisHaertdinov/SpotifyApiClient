@@ -10,18 +10,30 @@ const generateAuthorizationLink = () => {
 
 const siteMainElement = document.querySelector(`.main`);
 
-const authorizationLink = generateAuthorizationLink();
-
 const hash = window.location.hash;
+
+const playlistMock = {
+  description: `My take on the TV Show with the best songs from Season 1, 2, 3 and personal picks | ダーク | 闇 Serie`,
+  imageUrl: `https://i.scdn.co/image/ab67706c0000bebb7ee83f0ef57eaff6d1d3b7b1`,
+  title: `Dark 1, 2, 3 Soundtrack (Netflix)`,
+  tracksCount: 42,
+};
 
 switch (true) {
   case (hash.includes(`access_token`)):
-    document.querySelector(`body`).textContent = `SUCCESS`;
+    const playlistsElement = new PlaylistsView();
+
+    render(siteMainElement, playlistsElement);
+    new Array(10).fill(``)
+    .forEach(
+        () => render(playlistsElement, new PlaylistView(playlistMock))
+    );
     break;
   case (hash.includes(`error`)):
     document.querySelector(`body`).textContent = `ERROR`;
     break;
   default:
+    const authorizationLink = generateAuthorizationLink();
     render(siteMainElement, new AuthorizationView(authorizationLink));
     break;
 }
