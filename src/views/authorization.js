@@ -1,7 +1,6 @@
 import AbstractView from "./abstract.js";
 
 const createAuthorizationTemplate = (link) => {
-
   return (
     `<div class="authorization" >
       <a href="${link}" class="authorization__link">Click to authorize in Spotify</a>

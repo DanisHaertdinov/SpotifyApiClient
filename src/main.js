@@ -1,6 +1,8 @@
 import {SETTINGS} from './const';
 import {render} from './util/render';
 import AuthorizationView from './views/authorization';
+import PlaylistsView from './views/playlists';
+import PlaylistView from './views/playlist';
 
 const generateAuthorizationLink = () => {
   return `https://accounts.spotify.com/authorize?client_id=${SETTINGS.CLIENT_ID}&redirect_uri=${SETTINGS.APP_URL}&scope=user-read-private%20user-read-email&response_type=token&state=123`;
