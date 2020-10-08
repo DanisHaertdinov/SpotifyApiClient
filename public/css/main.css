@@ -1,3 +1,8 @@
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 .authorization {
   background-color: #b39d9d8f;
   height: 100vh;
@@ -21,4 +26,50 @@
   border: 6px solid #22c722b8;
   line-height: 32px;
   box-shadow: 0 0 20px black;
+}
+
+.playlists {
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: repeat(auto-fill,minmax(210px,1fr));
+  background-color: #121212;
+  padding: 30px;
+}
+
+.playlist {
+  padding: 20px 20px 16px;
+  background: #282828;
+  border-radius: 8px;
+}
+
+.playlist__image {
+  margin-bottom: 8px;
+  border-radius: 8px;
+}
+
+.playlist__title {
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fff;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.playlist__description {
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fff;
+  opacity: 0.7;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.playlist__tracks-count {
+  margin: 0;
+  color: aquamarine;
+  margin-bottom: 8px;
 }
