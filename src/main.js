@@ -29,16 +29,15 @@ switch (true) {
     api.getUserPlaylists()
     .then((playlistsData) => playlistsData.items)
     .then((playlists) => playlists.map((playlist) => Playlist.adaptToClient(playlist)))
-    .then((playlists) => console.log(playlists));
+    .then((playlists) => {
+      const playlistsElement = new PlaylistsView();
+      render(siteMainElement, playlistsElement);
 
+      playlists.forEach(
+          (playlist) => render(playlistsElement, new PlaylistView(playlist))
+      );
+    });
 
-    const playlistsElement = new PlaylistsView();
-
-    render(siteMainElement, playlistsElement);
-    new Array(10).fill(``)
-    .forEach(
-        () => render(playlistsElement, new PlaylistView(playlistMock))
-    );
     break;
   case (hash.includes(`error`)):
     document.querySelector(`body`).textContent = `ERROR`;
