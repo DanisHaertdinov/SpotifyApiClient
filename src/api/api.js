@@ -14,7 +14,7 @@ export default class Api {
   }
 
   getUserPlaylists() {
-    return this._load({url: `/me/playlists`})
+    return this._load({url: `me/playlists`})
       .then(Api.toJSON);
   }
 
@@ -41,7 +41,6 @@ export default class Api {
     ) {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-
     return response;
   }
 

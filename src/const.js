@@ -8,7 +8,12 @@ const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
+const EndPoints = {
+  SPOTIFY: `https://api.spotify.com/v1`,
+};
+
 export {
   SETTINGS,
   RenderPosition,
+  EndPoints
 };
