@@ -4,6 +4,7 @@ import AuthorizationView from './views/authorization';
 import PlaylistsView from './views/playlists';
 import PlaylistView from './views/playlist';
 import Api from './api/api';
+import Playlist from './models/playlist';
 
 const generateAuthorizationLink = () => {
   return `https://accounts.spotify.com/authorize?client_id=${SETTINGS.CLIENT_ID}&redirect_uri=${SETTINGS.APP_URL}&scope=user-read-private%20user-read-email%20playlist-read-private&response_type=token&state=123`;
@@ -22,9 +23,14 @@ const playlistMock = {
 
 switch (true) {
   case (hash.includes(`access_token`)):
+
     const token = `Bearer ${hash.split(`&`)[0].split(`=`)[1]}`;
     const api = new Api(EndPoints.SPOTIFY, token);
-    api.getUserPlaylists().then((playlists) => console.log(playlists));
+    api.getUserPlaylists()
+    .then((playlistsData) => playlistsData.items)
+    .then((playlists) => playlists.map((playlist) => Playlist.adaptToClient(playlist)))
+    .then((playlists) => console.log(playlists));
+
 
     const playlistsElement = new PlaylistsView();
 
