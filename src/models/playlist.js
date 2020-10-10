@@ -1,8 +1,8 @@
 export default class Playlist {
 
   static adaptToClient(playlist) {
-    console.log(playlist);
     return {
+      id: playlist.id,
       description: playlist.description,
       imageUrl: playlist.images[0].url,
       title: playlist.name,

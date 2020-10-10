@@ -18,6 +18,11 @@ export default class Api {
       .then(Api.toJSON);
   }
 
+  getPlaylistTracks(playlistId) {
+    return this._load({url: `playlists/${playlistId}/tracks`})
+      .then(Api.toJSON);
+  }
+
   _load({
     url,
     method = Method.GET,

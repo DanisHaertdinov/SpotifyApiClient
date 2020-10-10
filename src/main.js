@@ -14,13 +14,6 @@ const siteMainElement = document.querySelector(`.main`);
 
 const hash = window.location.hash;
 
-const playlistMock = {
-  description: `My take on the TV Show with the best songs from Season 1, 2, 3 and personal picks | ダーク | 闇 Serie`,
-  imageUrl: `https://i.scdn.co/image/ab67706c0000bebb7ee83f0ef57eaff6d1d3b7b1`,
-  title: `Dark 1, 2, 3 Soundtrack (Netflix)`,
-  tracksCount: 42,
-};
-
 switch (true) {
   case (hash.includes(`access_token`)):
 
