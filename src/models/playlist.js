@@ -7,7 +7,10 @@ export default class Playlist {
       imageUrl: playlist[`images`][0][`url`],
       title: playlist[`name`],
       tracksCount: playlist[`tracks`][`total`],
-      owner: playlist[`owner`],
+      owner: {
+        author: playlist[`owner`][`display_name`],
+        id: playlist[`owner`][`id`]
+      },
     };
   }
 }
