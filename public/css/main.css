@@ -73,3 +73,66 @@ img {
   color: aquamarine;
   margin-bottom: 8px;
 }
+
+.playlist-details {
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  background-color: #212126;
+  overflow-x: hidden;
+}
+
+.playlist-details__header {
+  padding: 32px;
+  display: flex;
+}
+
+.playlist-details__body {
+  padding: 32px;
+}
+
+.playlist-details__info {
+  align-self: flex-end;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.playlist-details__title {
+  font-size: 56px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.playlist-details__image {
+  width: 324px;
+  height: 324px;
+  margin-right: 20px;
+}
+
+.playlist-details__description {
+  color: #aeaebd;
+  padding-right: 30%;
+}
+
+.playlist-details__author {
+  color: #fff;
+  margin-right: 8px;
+}
+
+.playlist-details__tracks-count {
+  color: #fff;
+}
+
+.playlist-details__tracks {
+  width: 80%;
+  text-align: left;
+  color: #8a8585;;
+  font-size: 18px;
+}
+
+.track {
+  color: #fff;
+}
