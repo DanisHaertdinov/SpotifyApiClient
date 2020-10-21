@@ -6,6 +6,7 @@ import PlaylistView from './views/playlist';
 import Api from './api/api';
 import Playlist from './models/playlist';
 import PlaylistModal from './views/playlist-modal';
+import Track from './models/track';
 
 const generateAuthorizationLink = () => {
   return `https://accounts.spotify.com/authorize?client_id=${SETTINGS.CLIENT_ID}&redirect_uri=${SETTINGS.APP_URL}&scope=user-read-private%20user-read-email%20playlist-read-private&response_type=token&state=123`;
@@ -15,26 +16,14 @@ const siteMainElement = document.querySelector(`.main`);
 
 const hash = window.location.hash;
 
-const showPlaylistModal = (playlist) => {
-  const tracks = [{
-    title: `trakcs1`,
-    album: `almsad1`,
-    duration: `12h`
-  },
-  {
-    title: `trakcs3`,
-    album: `almsad1`,
-    duration: `12h`
-  },
-  {
-    title: `trakcs12`,
-    album: `almsad1`,
-    duration: `12h`
-  }
-  ];
-
-  const playlistComponent = new PlaylistModal(playlist, tracks);
-  document.body.appendChild(playlistComponent.getElement());
+const showPlaylistModal = (playlist, api) => {
+  api.getPlaylistTracks(playlist.id)
+  .then((tracksData) => tracksData.items)
+  .then((tracks) => tracks.map((track) => Track.adaptToClient(track)))
+  .then((tracks) => {
+    const playlistComponent = new PlaylistModal(playlist, tracks);
+    document.body.appendChild(playlistComponent.getElement());
+  });
 };
 
 switch (true) {
@@ -54,7 +43,7 @@ switch (true) {
             const playlistComponent = new PlaylistView(playlist);
             playlistComponent.getElement().addEventListener(`click`, (evt) => {
               evt.preventDefault();
-              showPlaylistModal(playlist);
+              showPlaylistModal(playlist, api);
             });
             render(playlistsElement, playlistComponent);
           }

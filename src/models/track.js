@@ -2,9 +2,9 @@ export default class Track {
 
   static adaptToClient(track) {
     return {
-      title: track[`id`],
-      album: track[`album`][`name`],
-      duration: track[`duration_ms`],
+      title: track[`track`][`name`],
+      album: track[`track`][`album`][`name`],
+      duration: track[`track`][`duration_ms`],
     };
   }
 }
