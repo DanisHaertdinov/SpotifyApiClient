@@ -14,6 +14,11 @@ export default class Api {
     this._authorization = authorization;
   }
 
+  getUserProfile() {
+    return this._load({url: `me`})
+      .then(Api.toJSON);
+  }
+
   getUserPlaylists() {
     return this._load({url: `me/playlists`})
       .then(Api.toJSON);
