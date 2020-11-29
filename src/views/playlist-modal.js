@@ -1,7 +1,7 @@
 import Abstract from './abstract';
 import Api from '../api/api';
 
-const createPlaylistModalTracksTemplate = (tracks) => {
+const createPlaylistModalTracksTemplate = (tracks, isUserPlaylist) => {
   return tracks.map((track) => {
     const {title, album, duration, uri, id} = track;
 
@@ -10,14 +10,14 @@ const createPlaylistModalTracksTemplate = (tracks) => {
         <td>${title}</td>
         <td>${album}</td>
         <td>${duration}</td>
-        <td><button data-id="${id}" data-uri="${uri}" class="track__delete">X</button></td>
+        ${isUserPlaylist ? `<td><button data-id="${id}" data-uri="${uri}" class="track__delete">X</button></td>` : ``}
       </tr>`
     );
   }).join(``);
 };
 
 const createPlaylistModalTemplate = (playlist, tracks) => {
-  const {imageUrl, title, description, tracksCount, owner} = playlist;
+  const {imageUrl, title, description, tracksCount, owner, isUserPlaylist} = playlist;
   const {author} = owner;
   return (
     `<div class="playlist-details">
@@ -37,9 +37,9 @@ const createPlaylistModalTemplate = (playlist, tracks) => {
             <th>Title</th>
             <th>Album</th>
             <th>Duration</th>
-            <th></th>
+            ${isUserPlaylist ? `<th>Delete</th>` : `` }
           </tr>
-          ${createPlaylistModalTracksTemplate(tracks)}
+          ${createPlaylistModalTracksTemplate(tracks, isUserPlaylist)}
         </table>
       </div>
   </div>`

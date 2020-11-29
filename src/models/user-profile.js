@@ -6,6 +6,7 @@ export default class UserProfile {
   static adaptToClient(profile) {
     return {
       name: profile[`display_name`],
+      id: profile[`id`],
     };
   }
 

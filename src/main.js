@@ -20,7 +20,7 @@ const hash = window.location.hash;
 let userProfile = {};
 
 const setupUserProfile = (api) => {
-  api.getUserProfile()
+  return api.getUserProfile()
     .then((profileData) => UserProfile.adaptToClient(profileData))
     .then((profile) => {
       userProfile = new UserProfile(profile);
@@ -28,9 +28,15 @@ const setupUserProfile = (api) => {
 };
 
 const showUserPlaylists = (api) => {
-  api.getUserPlaylists()
+  return api.getUserPlaylists()
     .then((playlistsData) => playlistsData.items)
-    .then((playlists) => playlists.map((playlist) => Playlist.adaptToClient(playlist)))
+    .then((playlists) => playlists.map((playlist) => {
+      const isUserPlaylist = (playlist.owner.id === userProfile.getUserProfile().id);
+      let adaptedPlaylist = Playlist.adaptToClient(playlist);
+      return Object.assign(adaptedPlaylist, {
+        isUserPlaylist
+      });
+    }))
     .then((playlists) => {
       const playlistsElement = new PlaylistsView();
       render(siteMainElement, playlistsElement);
@@ -71,8 +77,11 @@ switch (true) {
     const token = `Bearer ${hash.split(`&`)[0].split(`=`)[1]}`;
     const api = new Api(EndPoints.SPOTIFY, token);
 
-    setupUserProfile(api);
-    showUserPlaylists(api);
+    setupUserProfile(api)
+    .then(
+        showUserPlaylists(api)
+    );
+
 
     break;
   case (hash.includes(`error`)):
