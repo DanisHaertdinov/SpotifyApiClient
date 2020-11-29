@@ -5,6 +5,8 @@ export default class Track {
       title: track[`track`][`name`],
       album: track[`track`][`album`][`name`],
       duration: track[`track`][`duration_ms`],
+      uri: track[`track`][`uri`],
+      id: track[`track`][`id`],
     };
   }
 }

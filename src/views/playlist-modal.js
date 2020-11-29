@@ -1,15 +1,16 @@
 import Abstract from './abstract';
+import Api from '../api/api';
 
 const createPlaylistModalTracksTemplate = (tracks) => {
   return tracks.map((track) => {
-    const {title, album, duration} = track;
+    const {title, album, duration, uri, id} = track;
 
     return (
-      `<tr class="playlist-details__track track">
+      `<tr data-id="${id}" class="playlist-details__track track">
         <td>${title}</td>
         <td>${album}</td>
         <td>${duration}</td>
-        <td><button>X</button></td>
+        <td><button data-id="${id}" data-uri="${uri}" class="track__delete">X</button></td>
       </tr>`
     );
   }).join(``);
@@ -56,6 +57,24 @@ export default class PlaylistModal extends Abstract {
       evt.preventDefault();
       this._callback.closeButtonClick();
     };
+
+    this._trackDeleteButtonClickHandler = (evt) => {
+      if (evt.target.classList.contains(`track__delete`)) {
+        const trackUri = evt.target.dataset[`uri`];
+        const trackId = evt.target.dataset[`id`];
+
+        evt.preventDefault();
+        this._callback.trackDeleteButtonClick(trackUri)
+        .then(Api.checkStatus)
+        .then(() => {
+          this._deleteTrack(trackId);
+        });
+      }
+    };
+  }
+
+  _deleteTrack(id) {
+    this.getElement().querySelector(`.track[data-id="${id}"]`).remove();
   }
 
   getTemplate() {
@@ -65,5 +84,12 @@ export default class PlaylistModal extends Abstract {
   setCloseButtonClickHandler(callback) {
     this._callback.closeButtonClick = callback;
     this.getElement().querySelector(`.playlist-details__close`).addEventListener(`click`, this._closeButtonClickHandler);
+  }
+
+  setTrackDeleteButtonClickHandler(callback) {
+    this._callback.trackDeleteButtonClick = callback;
+    this.getElement().querySelectorAll(`.track`).forEach((element) => {
+      element.addEventListener(`click`, this._trackDeleteButtonClickHandler);
+    });
   }
 }

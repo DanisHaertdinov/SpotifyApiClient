@@ -1,5 +1,6 @@
 const Method = {
-  GET: `GET`
+  GET: `GET`,
+  DELETE: `DELETE`,
 };
 
 const SuccessHTTPStatusRange = {
@@ -23,6 +24,15 @@ export default class Api {
       .then(Api.toJSON);
   }
 
+  deleteTrackFromPlaylist(trackUri, playlistId) {
+    return this._load({
+      url: `playlists/${playlistId}/tracks`,
+      method: Method.DELETE,
+      body: JSON.stringify({tracks: [{uri: trackUri}]}),
+    })
+    .then(Api.toJSON);
+  }
+
   _load({
     url,
     method = Method.GET,
@@ -41,10 +51,10 @@ export default class Api {
 
   static checkStatus(response) {
     if (
-      response.status < SuccessHTTPStatusRange.MIN &&
+      response.status < SuccessHTTPStatusRange.MIN ||
       response.status > SuccessHTTPStatusRange.MAX
     ) {
-      throw new Error(`${response.status}: ${response.statusText}`);
+      return Promise.reject(new Error(`${response.status}: ${response.statusText}`));
     }
     return response;
   }
