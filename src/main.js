@@ -1,5 +1,5 @@
 import {EndPoints, SETTINGS} from './const';
-import {render} from './util/render';
+import {render, remove} from './util/render';
 import AuthorizationView from './views/authorization';
 import PlaylistsView from './views/playlists';
 import PlaylistView from './views/playlist';
@@ -23,6 +23,9 @@ const showPlaylistModal = (playlist, api) => {
   .then((tracks) => {
     const playlistComponent = new PlaylistModal(playlist, tracks);
     document.body.appendChild(playlistComponent.getElement());
+    playlistComponent.setCloseButtonClickHandler(() => {
+      remove(playlistComponent);
+    });
   });
 };
 

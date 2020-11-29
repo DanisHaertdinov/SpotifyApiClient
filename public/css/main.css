@@ -3,6 +3,14 @@ img {
   height: auto;
 }
 
+.visually-hidden {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+}
+
 .authorization {
   background-color: #b39d9d8f;
   height: 100vh;
@@ -131,6 +139,18 @@ img {
   text-align: left;
   color: #8a8585;;
   font-size: 18px;
+}
+
+.playlist-details__close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  background-size: contain;
+  background-image: url('../image/close-button.svg');
 }
 
 .track {

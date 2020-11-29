@@ -20,6 +20,7 @@ const createPlaylistModalTemplate = (playlist, tracks) => {
   const {author} = owner;
   return (
     `<div class="playlist-details">
+      <button class="playlist-details__close"><span class="visually-hidden">close</span></button>
       <div class="playlist-details__header">
         <img class="playlist-details__image" alt="" src="${imageUrl}" width="324" height="324">
         <div class="playlist-details__info">
@@ -50,9 +51,19 @@ export default class PlaylistModal extends Abstract {
 
     this._playlist = playlist;
     this._tracks = tracks;
+
+    this._closeButtonClickHandler = (evt) => {
+      evt.preventDefault();
+      this._callback.closeButtonClick();
+    };
   }
 
   getTemplate() {
     return createPlaylistModalTemplate(this._playlist, this._tracks);
+  }
+
+  setCloseButtonClickHandler(callback) {
+    this._callback.closeButtonClick = callback;
+    this.getElement().querySelector(`.playlist-details__close`).addEventListener(`click`, this._closeButtonClickHandler);
   }
 }
