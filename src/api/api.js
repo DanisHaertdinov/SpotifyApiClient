@@ -1,6 +1,8 @@
 const Method = {
   GET: `GET`,
   DELETE: `DELETE`,
+  POST: `POST`,
+  PUT: `PUT`
 };
 
 const SuccessHTTPStatusRange = {
@@ -36,6 +38,77 @@ export default class Api {
       body: JSON.stringify({tracks: [{uri: trackUri}]}),
     })
     .then(Api.toJSON);
+  }
+
+  addTrackToPlaylist(trackUri, playlistId) {
+    return this._load({
+      url: `playlists/${playlistId}/tracks`,
+      method: Method.POST,
+      body: JSON.stringify({uris: [trackUri]}),
+    })
+    .then(Api.toJSON);
+  }
+
+  createPlaylist(userId, {
+    name = `New Playlist`,
+    description = `New playlist description`,
+    isPublic = false
+  }) {
+    return this._load({
+      url: `users/${userId}/playlists`,
+      method: Method.POST,
+      body: JSON.stringify({name, description, isPublic}),
+    })
+    .then(Api.toJSON);
+  }
+
+  changePlaylist(playlistId, {
+    name,
+    description,
+    isPublic
+  }) {
+    return this._load({
+      url: `playlists/${playlistId}`,
+      method: Method.PUT,
+      body: JSON.stringify({name, description, isPublic}),
+    })
+    .then(Api.toJSON);
+  }
+
+  getTrack(trackId) {
+    return this._load({url: `tracks/${trackId}`})
+      .then(Api.toJSON);
+  }
+
+  search(type, query) {
+    return this._load({url: `search/?q=${query}&type=${type}`})
+      .then(Api.toJSON);
+  }
+
+  followPlaylist(playlistId) {
+    return this._load({
+      url: `playlists/${playlistId}/followers`,
+      method: Method.PUT,
+    })
+    .then(Api.toJSON);
+  }
+
+  unFollowPlaylist(playlistId) {
+    return this._load({
+      url: `playlists/${playlistId}/followers`,
+      method: Method.DELETE,
+    })
+    .then(Api.toJSON);
+  }
+
+  getAlbum(albumId) {
+    return this._load({url: `albums/${albumId}`})
+      .then(Api.toJSON);
+  }
+
+  getArtist(artistId) {
+    return this._load({url: `artists/${artistId}`})
+      .then(Api.toJSON);
   }
 
   _load({
