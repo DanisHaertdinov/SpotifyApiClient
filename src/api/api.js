@@ -26,8 +26,8 @@ export default class Api {
       .then(Api.toJSON);
   }
 
-  getPlaylistTracks(playlistId) {
-    return this._load({url: `playlists/${playlistId}/tracks`})
+  getPlaylistTracks(playlistId, limit = 100, offset = 0) {
+    return this._load({url: `playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}`})
       .then(Api.toJSON);
   }
 
