@@ -27,7 +27,7 @@ export default class Api {
   }
 
   getPlaylist(playlistId) {
-    return this._load({url: `/playlists/${playlistId}`})
+    return this._load({url: `playlists/${playlistId}`})
       .then(Api.toJSON);
   }
 
@@ -65,13 +65,12 @@ export default class Api {
 
   createPlaylist(userId, {
     name = `New Playlist`,
-    description = `New playlist description`,
-    isPublic = false
+    description = `New playlist description`
   }) {
     return this._load({
       url: `users/${userId}/playlists`,
       method: Method.POST,
-      body: JSON.stringify({name, description, isPublic}),
+      body: JSON.stringify({name, description}),
     })
     .then(Api.toJSON);
   }

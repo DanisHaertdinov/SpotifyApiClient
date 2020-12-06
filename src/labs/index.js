@@ -1,8 +1,5 @@
-import api from "../api/api";
 import Playlist from "../models/playlist";
 import Track from "../models/track";
-
-const PLAYLIST_ID = '1j2L3DjzZ3SdN64r83Sblj';
 
 //
 // 1. Построить 2-3 осмысленных цепочек запросов - это должно выглядеть, как часть бизнес-логики. Например:
@@ -11,21 +8,22 @@ const PLAYLIST_ID = '1j2L3DjzZ3SdN64r83Sblj';
 // 2 достать трэки из плейлиста
 // 3 создать новый плейлист с данными оригинала
 // 4 загрузить трэки из оргинального плейлиста в новый
-const clonePlaylist = (playlistId) => {
+const clonePlaylist = (playlistId, api) => {
   let originalPlaylist = {};
   api.getPlaylist(playlistId)
     .then((playlist) => {
       originalPlaylist = Playlist.adaptToClient(playlist);
 
-      return getAllPlaylistTracks(originalPlaylist);
+      return getAllPlaylistTracks(originalPlaylist, api);
     })
     .then((responses) => {
+      const tracks = [];
       responses.forEach((response) => {
-        const tracks = response.items.map((track) => Track.adaptToClient(track).uri);
-        originalPlaylist.tracks.push(tracks);
+        const tracksGroup = response.items.map((track) => Track.adaptToClient(track).uri);
+        tracks.push(tracksGroup);
       });
-
-      return api.createPlaylist({
+      originalPlaylist = Object.assign(originalPlaylist, {tracks});
+      return api.createPlaylist(`31tfipwn47j5udp5pl2ftcjx7nou`, {
         name: originalPlaylist.title,
         description: originalPlaylist.description
       })
@@ -34,23 +32,21 @@ const clonePlaylist = (playlistId) => {
         const newPlaylistId = adaptedPlaylist.id;
 
         const requests = originalPlaylist.tracks.map((tracksGroup) => {
-          api.addTracksToPlaylist(tracksGroup, newPlaylistId);
+          return api.addTracksToPlaylist(tracksGroup, newPlaylistId);
         });
-
         return Promise.all(requests);
       });
     });
 };
 
 
-const getAllPlaylistTracks = (playlist) => {
+const getAllPlaylistTracks = (playlist, api) => {
   const TRACKS_LIMIT_BY_REQUEST = 100;
   const tracksCount = playlist.tracksCount;
   const requestsCount = Math.ceil(tracksCount / TRACKS_LIMIT_BY_REQUEST);
-  let requestsCounter = -1;
 
-  const requests = new Array(requestsCount).fill(``).map(() => {
-    requestsCounter += 1;
+  const requests = new Array(requestsCount).fill(``).map((item, i) => {
+    const requestsCounter = i * TRACKS_LIMIT_BY_REQUEST;
     return api.getPlaylistTracks(playlist.id, TRACKS_LIMIT_BY_REQUEST, requestsCounter);
   });
 
@@ -60,5 +56,7 @@ const getAllPlaylistTracks = (playlist) => {
 // Написать функцию wait
 
 const wait = (delay) => {
-  return new Promise((resolve) => setTimeout(() => resolve(), delay));
+  return new Promise((resolve) => setTimeout(resolve, delay));
 };
+
+export {clonePlaylist};
