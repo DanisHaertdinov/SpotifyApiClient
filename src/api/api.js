@@ -26,6 +26,11 @@ export default class Api {
       .then(Api.toJSON);
   }
 
+  getUserTopTracks() {
+    return this._load({url: `me/top/tracks`})
+    .then(Api.toJSON);
+  }
+
   getPlaylist(playlistId) {
     return this._load({url: `playlists/${playlistId}`})
       .then(Api.toJSON);

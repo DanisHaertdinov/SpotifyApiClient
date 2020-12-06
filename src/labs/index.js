@@ -53,6 +53,21 @@ const getAllPlaylistTracks = (playlist, api) => {
   return Promise.all(requests);
 };
 
+const createPlaylistWithUserTopTracks = (api) => {
+  let tracks = [];
+
+  return api.getUserTopTracks()
+    .then((response) =>{
+      tracks = response.items.map((track) => track.uri);
+      return api.createPlaylist(`31tfipwn47j5udp5pl2ftcjx7nou`, {});
+    })
+    .then((newPlaylist) => {
+      const adaptedPlaylist = Playlist.adaptToClient(newPlaylist);
+      const newPlaylistId = adaptedPlaylist.id;
+      return api.addTracksToPlaylist(tracks, newPlaylistId);
+    });
+};
+
 // Написать функцию wait
 
 const wait = (delay) => {
@@ -109,4 +124,4 @@ const getPlaylistsConsistently = (api) => {
   return new Promise((resolve) => iterator(resolve));
 };
 
-export {clonePlaylist, wait, getPlaylistsInParallel, getPlaylistsInRace, getPlaylistsConsistently};
+export {clonePlaylist, wait, getPlaylistsInParallel, getPlaylistsInRace, getPlaylistsConsistently, createPlaylistWithUserTopTracks};
