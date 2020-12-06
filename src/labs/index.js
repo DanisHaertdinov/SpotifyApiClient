@@ -59,4 +59,54 @@ const wait = (delay) => {
   return new Promise((resolve) => setTimeout(resolve, delay));
 };
 
-export {clonePlaylist};
+// Собрать промисы в массив и выполнить их параллельно
+// Массив содержит минимум пять запросов
+
+const getPlaylistsInParallel = (api) => {
+  const PLAYLISTS_IDS = [
+    `76pmyfRjiEh0OdbhOl5xiW`, `4lGngVWb504apEiBcp5ur8`, `0sJOog5Q0RPLnh78I3yO7n`, `0NQjxHauN7XqzZF1jbRJdp`, `4nlTEyHMt44zT8EpfAeaVW`
+  ];
+
+  const requests = PLAYLISTS_IDS.map((id) => api.getPlaylist(id));
+  return Promise.all(requests);
+};
+
+// Собрать промисы в массив и разрезолвить его, когда выполнится первый
+// Массив содержит минимум пять запросов
+
+const getPlaylistsInRace = (api) => {
+  const PLAYLISTS_IDS = [
+    `76pmyfRjiEh0OdbhOl5xiW`, `4lGngVWb504apEiBcp5ur8`, `0sJOog5Q0RPLnh78I3yO7n`, `0NQjxHauN7XqzZF1jbRJdp`, `4nlTEyHMt44zT8EpfAeaVW`
+  ];
+
+  const requests = PLAYLISTS_IDS.map((id) => api.getPlaylist(id));
+  return Promise.race(requests);
+};
+
+// Собрать промисы в массив и выполнить их последовательно
+// Массив содержит минимум пять запросов
+
+const getPlaylistsConsistently = (api) => {
+  const PLAYLISTS_IDS = [
+    `76pmyfRjiEh0OdbhOl5xiW`, `4lGngVWb504apEiBcp5ur8`, `0sJOog5Q0RPLnh78I3yO7n`, `0NQjxHauN7XqzZF1jbRJdp`, `4nlTEyHMt44zT8EpfAeaVW`
+  ];
+
+  let count = 0;
+  const responses = [];
+  const iterator = (resolve) => {
+    if (PLAYLISTS_IDS[count]) {
+      return api.getPlaylist(PLAYLISTS_IDS[count])
+        .then((response) => {
+          responses.push(response);
+          count += 1;
+          iterator(resolve);
+        });
+    }
+    resolve(responses);
+    return ``;
+  };
+
+  return new Promise((resolve) => iterator(resolve));
+};
+
+export {clonePlaylist, wait, getPlaylistsInParallel, getPlaylistsInRace, getPlaylistsConsistently};
