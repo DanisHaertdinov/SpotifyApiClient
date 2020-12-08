@@ -10,7 +10,7 @@ import Track from "../models/track";
 // 4 загрузить трэки из оргинального плейлиста в новый
 const clonePlaylist = (playlistId, api) => {
   let originalPlaylist = {};
-  api.getPlaylist(playlistId)
+  return api.getPlaylist(playlistId)
     .then((playlist) => {
       originalPlaylist = Playlist.adaptToClient(playlist);
 
