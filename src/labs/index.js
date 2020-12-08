@@ -10,6 +10,7 @@ import Track from "../models/track";
 // 4 загрузить трэки из оргинального плейлиста в новый
 const clonePlaylist = (playlistId, api) => {
   let originalPlaylist = {};
+
   return api.getPlaylist(playlistId)
     .then((playlist) => {
       originalPlaylist = Playlist.adaptToClient(playlist);
@@ -18,24 +19,27 @@ const clonePlaylist = (playlistId, api) => {
     })
     .then((responses) => {
       const tracks = [];
+
       responses.forEach((response) => {
         const tracksGroup = response.items.map((track) => Track.adaptToClient(track).uri);
         tracks.push(tracksGroup);
       });
       originalPlaylist = Object.assign(originalPlaylist, {tracks});
+
       return api.createPlaylist(`31tfipwn47j5udp5pl2ftcjx7nou`, {
         name: originalPlaylist.title,
         description: originalPlaylist.description
-      })
-      .then((newPlaylist) => {
-        const adaptedPlaylist = Playlist.adaptToClient(newPlaylist);
-        const newPlaylistId = adaptedPlaylist.id;
-
-        const requests = originalPlaylist.tracks.map((tracksGroup) => {
-          return api.addTracksToPlaylist(tracksGroup, newPlaylistId);
-        });
-        return Promise.all(requests);
       });
+    })
+    .then((newPlaylist) => {
+      const adaptedPlaylist = Playlist.adaptToClient(newPlaylist);
+      const newPlaylistId = adaptedPlaylist.id;
+
+      const requests = originalPlaylist.tracks.map((tracksGroup) => {
+        return api.addTracksToPlaylist(tracksGroup, newPlaylistId);
+      });
+
+      return Promise.all(requests);
     });
 };
 
@@ -47,6 +51,7 @@ const getAllPlaylistTracks = (playlist, api) => {
 
   const requests = new Array(requestsCount).fill(``).map((item, i) => {
     const requestsCounter = i * TRACKS_LIMIT_BY_REQUEST;
+
     return api.getPlaylistTracks(playlist.id, TRACKS_LIMIT_BY_REQUEST, requestsCounter);
   });
 
@@ -59,11 +64,13 @@ const createPlaylistWithUserTopTracks = (api) => {
   return api.getUserTopTracks()
     .then((response) =>{
       tracks = response.items.map((track) => track.uri);
+
       return api.createPlaylist(`31tfipwn47j5udp5pl2ftcjx7nou`, {});
     })
     .then((newPlaylist) => {
       const adaptedPlaylist = Playlist.adaptToClient(newPlaylist);
       const newPlaylistId = adaptedPlaylist.id;
+
       return api.addTracksToPlaylist(tracks, newPlaylistId);
     });
 };
@@ -83,6 +90,7 @@ const getPlaylistsInParallel = (api) => {
   ];
 
   const requests = PLAYLISTS_IDS.map((id) => api.getPlaylist(id));
+
   return Promise.all(requests);
 };
 
@@ -95,6 +103,7 @@ const getPlaylistsInRace = (api) => {
   ];
 
   const requests = PLAYLISTS_IDS.map((id) => api.getPlaylist(id));
+
   return Promise.race(requests);
 };
 
@@ -108,8 +117,10 @@ const getPlaylistsConsistently = (api) => {
 
   let count = 0;
   const responses = [];
+
   const iterator = (resolve) => {
     if (PLAYLISTS_IDS[count]) {
+
       return api.getPlaylist(PLAYLISTS_IDS[count])
         .then((response) => {
           responses.push(response);
@@ -118,6 +129,7 @@ const getPlaylistsConsistently = (api) => {
         });
     }
     resolve(responses);
+
     return ``;
   };
 
