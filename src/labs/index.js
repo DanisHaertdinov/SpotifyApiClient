@@ -136,4 +136,14 @@ const getPlaylistsConsistently = (api) => {
   return new Promise((resolve) => iterator(resolve));
 };
 
-export {clonePlaylist, wait, getPlaylistsInParallel, getPlaylistsInRace, getPlaylistsConsistently, createPlaylistWithUserTopTracks};
+const getPlaylistsConsistentlyByReduce = (api) => {
+  const PLAYLISTS_IDS = [
+    `76pmyfRjiEh0OdbhOl5xiW`, `4lGngVWb504apEiBcp5ur8`, `0sJOog5Q0RPLnh78I3yO7n`, `0NQjxHauN7XqzZF1jbRJdp`, `4nlTEyHMt44zT8EpfAeaVW`
+  ];
+
+  const requests = PLAYLISTS_IDS.map((id) => () => api.getPlaylist(id));
+
+  return requests.reduce((promise, request) => promise.then(request), Promise.resolve());
+};
+
+export {clonePlaylist, wait, getPlaylistsInParallel, getPlaylistsInRace, getPlaylistsConsistently, createPlaylistWithUserTopTracks, getPlaylistsConsistentlyByReduce};
