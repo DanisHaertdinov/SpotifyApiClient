@@ -26,8 +26,18 @@ export default class Api {
       .then(Api.toJSON);
   }
 
-  getPlaylistTracks(playlistId) {
-    return this._load({url: `playlists/${playlistId}/tracks`})
+  getUserTopTracks() {
+    return this._load({url: `me/top/tracks`})
+    .then(Api.toJSON);
+  }
+
+  getPlaylist(playlistId) {
+    return this._load({url: `playlists/${playlistId}`})
+      .then(Api.toJSON);
+  }
+
+  getPlaylistTracks(playlistId, limit = 100, offset = 0) {
+    return this._load({url: `playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}`})
       .then(Api.toJSON);
   }
 
@@ -49,15 +59,23 @@ export default class Api {
     .then(Api.toJSON);
   }
 
+  addTracksToPlaylist(tracksUris, playlistId) {
+    return this._load({
+      url: `playlists/${playlistId}/tracks`,
+      method: Method.POST,
+      body: JSON.stringify({uris: tracksUris}),
+    })
+      .then(Api.toJSON);
+  }
+
   createPlaylist(userId, {
     name = `New Playlist`,
-    description = `New playlist description`,
-    isPublic = false
+    description = `New playlist description`
   }) {
     return this._load({
       url: `users/${userId}/playlists`,
       method: Method.POST,
-      body: JSON.stringify({name, description, isPublic}),
+      body: JSON.stringify({name, description}),
     })
     .then(Api.toJSON);
   }

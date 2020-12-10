@@ -4,7 +4,7 @@ export default class Playlist {
     return {
       id: playlist[`id`],
       description: playlist[`description`],
-      imageUrl: playlist[`images`][0][`url`],
+      imageUrl: (playlist[`images`][0] ? playlist[`images`][0][`url`] : ``),
       title: playlist[`name`],
       tracksCount: playlist[`tracks`][`total`],
       owner: {
