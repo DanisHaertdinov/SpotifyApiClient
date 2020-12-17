@@ -13,7 +13,7 @@ const clonePlaylist = async (playlistId, api) => {
   });
   const newPlaylist = Playlist.adaptToClient(newPlaylistResponse);
 
-  return await Promise.all(
+  return Promise.all(
       tracks.map((tracksGroup) => {
         return api.addTracksToPlaylist(tracksGroup, newPlaylist.id);
       })
@@ -42,32 +42,7 @@ const createPlaylistWithUserTopTracks = async (api) => {
   const newPlaylistResponse = await api.createPlaylist(`31tfipwn47j5udp5pl2ftcjx7nou`, {});
   const newPlaylist = Playlist.adaptToClient(newPlaylistResponse);
 
-  return await api.addTracksToPlaylist(tracks, newPlaylist.id);
-};
-
-const wait = async (delay) => {
-  return await new Promise((resolve) => setTimeout(resolve, delay));
-};
-
-const getPlaylistsInParallel = async (api) => {
-  const PLAYLISTS_IDS = [
-    `76pmyfRjiEh0OdbhOl5xiW`, `4lGngVWb504apEiBcp5ur8`, `0sJOog5Q0RPLnh78I3yO7n`, `0NQjxHauN7XqzZF1jbRJdp`, `4nlTEyHMt44zT8EpfAeaVW`
-  ];
-
-  return await Promise.all(
-      PLAYLISTS_IDS.map((id) => api.getPlaylist(id))
-  );
-};
-
-
-const getPlaylistsInRace = async (api) => {
-  const PLAYLISTS_IDS = [
-    `76pmyfRjiEh0OdbhOl5xiW`, `4lGngVWb504apEiBcp5ur8`, `0sJOog5Q0RPLnh78I3yO7n`, `0NQjxHauN7XqzZF1jbRJdp`, `4nlTEyHMt44zT8EpfAeaVW`
-  ];
-
-  return await Promise.race(
-      PLAYLISTS_IDS.map((id) => api.getPlaylist(id))
-  );
+  return api.addTracksToPlaylist(tracks, newPlaylist.id);
 };
 
 const getPlaylistsConsistently = async (api) => {
@@ -86,4 +61,4 @@ const getPlaylistsConsistently = async (api) => {
   );
 };
 
-export {clonePlaylist, createPlaylistWithUserTopTracks, wait, getPlaylistsConsistently, getPlaylistsInParallel, getPlaylistsInRace};
+export {clonePlaylist, createPlaylistWithUserTopTracks, getPlaylistsConsistently};
