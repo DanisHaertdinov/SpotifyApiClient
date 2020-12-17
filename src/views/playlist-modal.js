@@ -22,6 +22,7 @@ const createPlaylistModalTemplate = (playlist, tracks) => {
   return (
     `<div class="playlist-details">
       <button class="playlist-details__close"><span class="visually-hidden">close</span></button>
+      <button class="playlist-details__clone"><span>clone</span></button>
       <div class="playlist-details__header">
         <img class="playlist-details__image" alt="" src="${imageUrl}" width="324" height="324">
         <div class="playlist-details__info">
@@ -58,6 +59,11 @@ export default class PlaylistModal extends Abstract {
       this._callback.closeButtonClick();
     };
 
+    this._cloneButtonClickHandler = (evt) => {
+      evt.preventDefault();
+      this._callback.cloneButtonClick(this._playlist.id);
+    };
+
     this._trackDeleteButtonClickHandler = (evt) => {
       if (evt.target.classList.contains(`track__delete`)) {
         const trackUri = evt.target.dataset[`uri`];
@@ -84,6 +90,11 @@ export default class PlaylistModal extends Abstract {
   setCloseButtonClickHandler(callback) {
     this._callback.closeButtonClick = callback;
     this.getElement().querySelector(`.playlist-details__close`).addEventListener(`click`, this._closeButtonClickHandler);
+  }
+
+  setCloneButtonClickHandler(callback) {
+    this._callback.cloneButtonClick = callback;
+    this.getElement().querySelector(`.playlist-details__clone`).addEventListener(`click`, this._cloneButtonClickHandler);
   }
 
   setTrackDeleteButtonClickHandler(callback) {
