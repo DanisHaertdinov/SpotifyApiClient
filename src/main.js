@@ -9,6 +9,7 @@ import PlaylistModal from './views/playlist-modal';
 import Track from './models/track';
 import UserProfile from './models/user-profile';
 import {clonePlaylist, createPlaylistWithUserTopTracks} from './labs/async';
+import {init} from './labs/tasks-and-microtasks';
 
 const generateAuthorizationLink = () => {
   return `https://accounts.spotify.com/authorize?client_id=${SETTINGS.CLIENT_ID}&redirect_uri=${SETTINGS.APP_URL}&scope=user-read-private%20playlist-modify-private%20%20playlist-modify-public%20user-read-email%20playlist-read-private%20playlist-modify-private%20&response_type=token&state=123`;
@@ -109,3 +110,5 @@ switch (true) {
     render(siteMainElement, new AuthorizationView(authorizationLink));
     break;
 }
+
+init();
