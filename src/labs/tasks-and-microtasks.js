@@ -3,9 +3,9 @@ const showTaskInfo = (methodName) => console.log(`${methodName}: I'm task`);
 const showMicroTaskInfo = (methodName) => console.log(`${methodName}: I'm microtask`);
 
 const init = () => {
-  document.body.addEventListener(`DOMContentLoaded`, showTaskInfo(`addEventListener`));
+  document.body.addEventListener(`DOMContentLoaded`, () => showTaskInfo(`addEventListener`));
 
-  setTimeout(showTaskInfo(`setTimeout`), 0);
+  setTimeout(() => showTaskInfo(`setTimeout`), 0);
 
   const interval = setInterval(() => {
     showTaskInfo(`setInterval`);
@@ -25,7 +25,8 @@ const init = () => {
   fetch(`https://echo.htmlacademy.ru`)
   .then(() => showMicroTaskInfo(`fetch`));
 
-  window.postMessage(showTaskInfo(`postMessage`));
+  window.postMessage(`postMessage`, window);
+  window.onmessage = () => showTaskInfo(`postMessage`);
 
   const frame = requestAnimationFrame(() => {
     showTaskInfo(`requestAnimationFrame`);
